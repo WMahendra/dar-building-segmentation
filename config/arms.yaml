@@ -1,0 +1,65 @@
+# The treatment arms. Everything not named here comes from config.yaml and is
+# identical across arms, so any difference in the results table is attributable
+# to the loss function or the sampling fraction and to nothing else.
+#
+# Two levers are varied, and deliberately varied one at a time:
+#   loss                  how the objective treats the minority class
+#   oversample_positive   how often the minority class appears in a batch
+# The last arm crosses them, which is the only way to see whether they are
+# additive or redundant.
+
+arms:
+  bce:
+    loss: bce
+    # The control. No imbalance handling of any kind.
+
+  weighted_bce:
+    loss: weighted_bce
+    # pos_weight defaults to the measured inverse class frequency,
+    # (1 - f) / f from stats.json, rather than a hand-picked number.
+
+  dice:
+    loss: dice
+
+  tversky:
+    loss: tversky
+    loss_kwargs:
+      beta: 0.7             # false negatives cost more than false positives
+
+  focal:
+    loss: focal
+    loss_kwargs:
+      gamma: 2.0
+      alpha: 0.25
+
+  bce_dice:
+    loss: bce_dice
+
+  oversample:
+    loss: bce
+    oversample_positive: 0.5
+    # Sampling alone: plain loss, but half of every batch contains buildings.
+
+  oversample_dice:
+    loss: dice
+    oversample_positive: 0.5
+    # Both levers together.
+
+# Pixel-based comparators, run by src/baseline_pixel.py. These answer "how much
+# of this is solvable without spatial context", which is a different question
+# from the arms above.
+pixel_arms:
+  pixel_plain:
+    classifier: hist_gb
+    pixels_per_tile: 200
+
+  pixel_smote:
+    classifier: hist_gb
+    pixels_per_tile: 200
+    smote: true
+    smote_k_neighbors: 5
+
+  pixel_smote_adaboost:
+    classifier: adaboost
+    pixels_per_tile: 200
+    smote: true

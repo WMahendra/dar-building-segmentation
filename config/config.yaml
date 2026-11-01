@@ -1,0 +1,24 @@
+# Settings shared by every arm. Nothing here may differ between arms, or the
+# comparison stops being a comparison.
+
+city: dar                     # Open Cities city code; see src/fetch_data.py
+raw_dir: data/raw
+processed_dir: data/processed
+results_dir: results
+
+# Tiling
+patch: 256                    # must be divisible by 2 ** depth
+bands: 3                      # the drone imagery is RGB
+
+# Architecture (fixed across arms)
+depth: 4
+base_filters: 32
+dropout: 0.1
+
+# Optimisation (fixed across arms)
+batch_size: 16
+epochs: 40
+patience: 8                   # early stopping on val_loss
+learning_rate: 0.0003
+seed: 42
+verbose: 1

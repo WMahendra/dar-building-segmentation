@@ -1,0 +1,10 @@
+# Data and outputs are reproduced by the scripts, not stored in git.
+data/
+results/
+figures/
+*.keras
+*.h5
+__pycache__/
+*.pyc
+.ipynb_checkpoints/
+.DS_Store
